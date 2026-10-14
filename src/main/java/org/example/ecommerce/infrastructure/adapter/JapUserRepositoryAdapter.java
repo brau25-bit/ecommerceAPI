@@ -7,6 +7,8 @@ import org.example.ecommerce.infrastructure.mapper.UserPersistanceMapper;
 import org.example.ecommerce.infrastructure.persistence.JpaUserRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class JapUserRepositoryAdapter implements UserRepository {
     private final JpaUserRepository jpaUserRepository;
@@ -26,5 +28,12 @@ public class JapUserRepositoryAdapter implements UserRepository {
         UserEntity saved = jpaUserRepository.save(userEntity);
 
         return this.userPersistanceMapper.toUserModel(saved);
+    }
+
+    @Override
+    public User findByEmail(String email){
+        UserEntity entity = jpaUserRepository.findByEmail(email);
+
+        return this.userPersistanceMapper.toUserModel(entity);
     }
 }
