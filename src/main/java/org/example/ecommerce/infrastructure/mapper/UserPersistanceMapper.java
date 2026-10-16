@@ -25,7 +25,7 @@ public class UserPersistanceMapper {
                 user.getLastName(),
                 user.getAge(),
                 user.getEmail(),
-                null,
+                user.getPassword(),
                 user.getCreatedAt()
         );
     }
