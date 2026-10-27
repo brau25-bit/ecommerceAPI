@@ -3,6 +3,7 @@ package org.example.ecommerce.application.UseCase.users;
 import org.example.ecommerce.application.ApplicationMapper.UserApplicationMapper;
 import org.example.ecommerce.application.command.CreateUserCommand;
 import org.example.ecommerce.domain.DTO.responses.user.UserResponse;
+import org.example.ecommerce.presentation.http.errors.EmailAlreadyExistsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.example.ecommerce.domain.interfaces.UserRepository;
 import org.example.ecommerce.domain.models.User;
@@ -27,6 +28,10 @@ public class CreateUserCase {
     }
 
     public UserResponse execute(CreateUserCommand user){
+        if(userRepository.existsByEmail(user.email())) {
+            throw new EmailAlreadyExistsException("Email is already registered");
+        }
+
         String passwordHashed = this.passwordEncoder.encode(user.password());
 
         UUID generatedId = UUID.randomUUID();

@@ -4,13 +4,10 @@ import org.example.ecommerce.domain.DTO.responses.user.LoginResponse;
 import org.example.ecommerce.domain.interfaces.UserRepository;
 import org.example.ecommerce.domain.models.User;
 import org.example.ecommerce.domain.ports.JwtPort;
-import org.example.ecommerce.presentation.http.errors.BadRequestException;
+import org.example.ecommerce.presentation.http.errors.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.awt.desktop.SystemSleepEvent;
-import java.time.Instant;
 import java.util.Date;
 
 @Service
@@ -35,7 +32,7 @@ public class userLoginCase {
     public LoginResponse execute(String email, String password){
         User response = this.userRepository.findByEmail(email);
 
-        if(!this.passwordEncoder.matches(password, response.getPassword())) throw new BadRequestException("Field is wrong");
+        if(response == null || !this.passwordEncoder.matches(password, response.getPassword())) throw new InvalidCredentialsException("Invalid credentials");
 
         String token = this.jwtPort.generateJwt(response.getEmail());
 
