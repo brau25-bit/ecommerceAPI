@@ -2,9 +2,12 @@ package org.example.ecommerce.presentation.http.errors.ExeptionHandler;
 
 import org.example.ecommerce.domain.DTO.responses.error.ExceptionResponse;
 import org.example.ecommerce.presentation.http.errors.BadRequestException;
+import org.example.ecommerce.presentation.http.errors.EmailAlreadyExistsException;
+import org.example.ecommerce.presentation.http.errors.InvalidCredentialsException;
 import org.example.ecommerce.presentation.http.errors.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -40,5 +43,33 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidCredentials(
+            InvalidCredentialsException invalidCredentialsException
+    ){
+        ExceptionResponse response = new ExceptionResponse(
+                400,
+                invalidCredentialsException.getMessage(),
+                Instant.now(),
+                Map.of()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleEmailAlreadyExists(
+            EmailAlreadyExistsException emailAlreadyExistsException
+    ){
+        ExceptionResponse response = new ExceptionResponse(
+                409,
+                emailAlreadyExistsException.getMessage(),
+                Instant.now(),
+                Map.of()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 }
