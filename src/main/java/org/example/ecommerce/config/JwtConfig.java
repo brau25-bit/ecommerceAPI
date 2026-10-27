@@ -14,7 +14,7 @@ import io.jsonwebtoken.io.Decoders;
 
 @Configuration
 public class JwtConfig {
-    @Value("${jwt.secretKey}")
+    @Value("${jwt.secret}")
     private String secret;
 
     @Bean
