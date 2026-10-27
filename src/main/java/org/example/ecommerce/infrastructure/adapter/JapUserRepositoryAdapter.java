@@ -34,6 +34,13 @@ public class JapUserRepositoryAdapter implements UserRepository {
     public User findByEmail(String email){
         UserEntity entity = jpaUserRepository.findByEmail(email);
 
+        if(entity == null) return null;
+
         return this.userPersistanceMapper.toUserModel(entity);
+    }
+
+    @Override
+    public boolean existsByEmail(String email){
+        return jpaUserRepository.existsByEmail(email);
     }
 }
